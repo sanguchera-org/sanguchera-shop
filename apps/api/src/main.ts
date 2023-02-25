@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import * as path from 'path';
 import { Firebase } from './app/config/Firebase';
 import { productRouter } from './app/routes/product.router';
@@ -6,6 +7,8 @@ import { productRouter } from './app/routes/product.router';
 const app = express();
 
 const firebase = new Firebase().initialize()
+
+app.use(cors("*"));
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
