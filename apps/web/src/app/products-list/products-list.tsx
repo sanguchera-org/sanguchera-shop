@@ -1,21 +1,19 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil'
+import { Product } from '../models';
+import { cartState } from '../store';
 
 /* eslint-disable-next-line */
 export interface ProductsListProps {}
 
-interface Product {
-  id: string;
-  name: string;
-  base_color: string;
-  description: string;
-  stock: number;
-  price: number;
-  images: Array<string>;
-}
-
 export function ProductsList(props: ProductsListProps) {
   const [products, setProducts] = useState<Array<Product>>([]);
+  const [cart, setCart] = useRecoilState<Product[]>(cartState);
+
+  const addToCart = (product: Product) => () => {
+    setCart([...cart, product])
+  };
 
   useEffect(() => {
     const getProduct = async () => {
@@ -65,6 +63,7 @@ export function ProductsList(props: ProductsListProps) {
               <button
                 type="button"
                 className="py-2 px-4 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                onClick={addToCart(product)}
               >
                 Buy now
               </button>
