@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil';
 import { Product } from '../models';
+import { Cart } from '../models/cart';
 import { cartState } from '../store';
 
 /* eslint-disable-next-line */
@@ -9,10 +10,21 @@ export interface ProductsListProps {}
 
 export function ProductsList(props: ProductsListProps) {
   const [products, setProducts] = useState<Array<Product>>([]);
-  const [cart, setCart] = useRecoilState<Product[]>(cartState);
+  const [cart, setCart] = useRecoilState<Cart>(cartState);
 
   const addToCart = (product: Product) => () => {
-    setCart([...cart, product])
+    const index = cart.findIndex((item) => item.product.id === product.id);
+    const items = Object.assign([], cart);
+
+    if (index >= 0) {
+      const item = Object.assign({}, cart[index]);
+      item.quantity = item.quantity + 1;
+      items.splice(index, 1, item);
+    } else {
+      items.push({ product, quantity: 1 });
+    }
+
+    setCart(items);
   };
 
   useEffect(() => {
@@ -30,7 +42,7 @@ export function ProductsList(props: ProductsListProps) {
           <div className="relative flex-none w-24 md:w-48">
             <img
               src={product.images[0]}
-              alt="shopping image"
+              alt="Producto"
               className="absolute inset-0 object-cover w-full h-full rounded-lg"
             />
           </div>

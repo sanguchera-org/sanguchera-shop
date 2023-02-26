@@ -1,3 +1,4 @@
 import { Product } from './product.model';
+import { Cart, CartItem } from './cart';
 
-export { Product };
+export { Product, Cart, CartItem };
