@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import ProductsList from '../products-list/products-list';
+import ProductsList from '../products/products-list/products-list';
 import './shop.scss';
 
 export function Shop() {
