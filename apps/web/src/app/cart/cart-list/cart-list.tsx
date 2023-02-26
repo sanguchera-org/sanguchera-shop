@@ -27,7 +27,10 @@ export function CartList() {
   return (
     <section className="flex flex-col">
       {cart.map((item, index) => (
-        <article className="grid grid-cols-4 gap-4 border rounded-sm mb-4">
+        <article
+          key={item.product.id}
+          className="grid grid-cols-4 gap-4 border rounded-sm mb-4"
+        >
           <section className="col-span-1 p-4">
             <img
               className="h-20 w-20 rounded-md object-cover object-center"
@@ -41,7 +44,10 @@ export function CartList() {
               <p className="mt-auto text-lg font-bold">
                 S/. {item.product.price.toFixed(2)}
               </p>
-              <button className="w-min text-sm text-red-500" onClick={onRemoveItem(index)}>
+              <button
+                className="w-min text-sm text-red-500"
+                onClick={onRemoveItem(index)}
+              >
                 Eliminar
               </button>
             </div>
