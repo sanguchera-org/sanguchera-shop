@@ -40,7 +40,7 @@ export function ProductsList(props: ProductsListProps) {
   return (
     <div className="max-w-2xl mx-auto">
       {products.map((product) => (
-        <Link to={product.id}>
+        <Link key={product.id} to={product.id}>
           <div className="flex bg-white rounded-lg shadow my-6">
             <div className="relative flex-none w-24 md:w-48">
               <img

@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { Suspense } from 'react';
 import ProductDetail from './products/product-detail/product-detail';
+import Open from './layout/open/open';
 
 export function App() {
   return (
@@ -22,6 +23,7 @@ export function App() {
           <Route path="/compras" element={<Cart />} />
         </Routes>
         <Footer></Footer>
+        <Open></Open>
       </RecoilRoot>
     </div>
   );
