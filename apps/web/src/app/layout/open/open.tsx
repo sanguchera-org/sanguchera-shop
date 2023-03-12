@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import SignIn from '../../auth/sign-in/sign-in';
+import SignUp from '../../auth/sign-up/sign-up';
 import './open.css';
 
 export function Open() {
@@ -21,7 +22,12 @@ export function Open() {
     setSearchParams(searchParams);
   }, [param, searchParams, setSearchParams]);
 
-  return <SignIn open={signIn} setOpen={setSignIn}></SignIn>;
+  return (
+    <>
+      {signIn && <SignIn open={signIn} setOpen={setSignIn}></SignIn>}
+      {signUp && <SignUp open={signUp} setOpen={setSignUp}></SignUp>}
+    </>
+  );
 }
 
 export default Open;
