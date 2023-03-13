@@ -1,26 +1,40 @@
 import { Modal } from '@mui/material';
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { FaTimes } from 'react-icons/fa';
-import { Link, useSearchParams } from 'react-router-dom';
-import './sign-in.css';
+import { useSearchParams } from 'react-router-dom';
+import styles from './sign-up.module.scss';
 
-interface SignInProps {
+export interface SignUpProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-export function SignIn(props: SignInProps) {
+export function SignUp(props: SignUpProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    //TODO: authentication
+  const password = watch('password');
+
+  const onSubmit = async (data: any) => {
+    await axios.post('http://localhost:3333/user/create', {
+      email: data.email,
+      password: data.password,
+    });
+    props.setOpen(false);
+  };
+
+  const validateConfirmPassword = (value: any) => {
+    if (value !== password) {
+      return false;
+    }
+    return true;
   };
 
   const handleClose = () => {
@@ -31,8 +45,8 @@ export function SignIn(props: SignInProps) {
     return errors[control] ? 'border-red-500' : '';
   };
 
-  const handleSignUp = () => {
-    searchParams.set('abrir', 'registrar');
+  const handleSignIn = () => {
+    searchParams.set('abrir', 'ingresar');
     setSearchParams(searchParams);
   };
   return (
@@ -56,7 +70,7 @@ export function SignIn(props: SignInProps) {
               <div className="relative bg-white rounded-lg shadow">
                 <section className="flex items-start justify-between p-4 border-b rounded-t">
                   <h3 className="text-xl font-semibold text-gray-900">
-                    Ingresar
+                    Registrarse
                   </h3>
                   <button
                     type="button"
@@ -68,7 +82,7 @@ export function SignIn(props: SignInProps) {
                   </button>
                 </section>
                 <section className="p-6 space-y-6">
-                  <div className="grid gap-6 mb-6 md:grid-cols-2">
+                  <div className="grid gap-6 mb-6 grid-cols-1">
                     <div>
                       <label
                         htmlFor="email"
@@ -86,25 +100,48 @@ export function SignIn(props: SignInProps) {
                         {...register('email', { required: true })}
                       />
                     </div>
-                    <div>
-                      <label
-                        htmlFor="password"
-                        className="block mb-2 text-sm font-medium text-gray-900"
-                      >
-                        Contraseña
-                      </label>
-                      <input
-                        type="password"
-                        id="password"
-                        className={`${errorClass(
-                          'password'
-                        )} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
-                        placeholder="******"
-                        {...register('password', {
-                          required: true,
-                          minLength: 6,
-                        })}
-                      />
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <label
+                          htmlFor="password"
+                          className="block mb-2 text-sm font-medium text-gray-900"
+                        >
+                          Contraseña
+                        </label>
+                        <input
+                          type="password"
+                          id="password"
+                          className={`${errorClass(
+                            'password'
+                          )} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+                          placeholder="******"
+                          {...register('password', {
+                            required: true,
+                            minLength: 6,
+                          })}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="password"
+                          className="block mb-2 text-sm font-medium text-gray-900"
+                        >
+                          Confirmar contraseña
+                        </label>
+                        <input
+                          type="password"
+                          id="confirmPassword"
+                          className={`${errorClass(
+                            'confirmPassword'
+                          )} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+                          placeholder="******"
+                          {...register('confirmPassword', {
+                            required: true,
+                            validate: validateConfirmPassword,
+                            minLength: 6,
+                          })}
+                        />
+                      </div>
                     </div>
                   </div>
                 </section>
@@ -114,13 +151,13 @@ export function SignIn(props: SignInProps) {
                     type="submit"
                     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
-                    Ingresar
+                    Registrar
                   </button>
                   <button
-                    onClick={handleSignUp}
+                    onClick={handleSignIn}
                     className="border border-blue-700 text-blue-700 px-4 py-2 rounded-lg"
                   >
-                    ¿No tienes una cuenta?
+                    ¿Ya tienes una cuenta?
                   </button>
                 </section>
               </div>
@@ -132,4 +169,4 @@ export function SignIn(props: SignInProps) {
   );
 }
 
-export default SignIn;
+export default SignUp;
