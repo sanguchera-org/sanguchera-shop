@@ -1,0 +1,26 @@
+{
+  "hosting": {
+    "public": "dist/apps/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "predeploy": [
+      "npx nx build web --configuration=development"
+    ]
+  },
+  "functions": {
+    "source": "dist/apps/api",
+    "predeploy": [
+      "npx nx build api --configuration=development",
+      "npx nx package api"
+    ]
+  }
+}
