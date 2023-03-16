@@ -2,7 +2,7 @@ import { Modal } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { FaTimes } from 'react-icons/fa';
 import { useSearchParams } from 'react-router-dom';
-import './sign-in.css';
+import './sign-in.scss';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useSetRecoilState } from 'recoil';
 import { tokenState } from '../../store/app/app.atom';

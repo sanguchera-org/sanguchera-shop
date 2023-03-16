@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { FaTimes } from 'react-icons/fa';
 import { useSearchParams } from 'react-router-dom';
-import './sign-up.css';
+import './sign-up.scss';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 
 export interface SignUpProps {
