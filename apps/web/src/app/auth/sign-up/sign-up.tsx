@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { FaTimes } from 'react-icons/fa';
 import { useSearchParams } from 'react-router-dom';
-import styles from './sign-up.module.scss';
+import './sign-up.css';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 
 export interface SignUpProps {
   open: boolean;
@@ -23,11 +24,19 @@ export function SignUp(props: SignUpProps) {
   const password = watch('password');
 
   const onSubmit = async (data: any) => {
-    await axios.post('http://localhost:3333/user/create', {
-      email: data.email,
-      password: data.password,
-    });
-    props.setOpen(false);
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, data.email, data.password)
+      .then(async (token) => {
+        await axios.post('http://localhost:3333/user/create', {
+          uid: token.user.uid,
+          email: data.email,
+          password: data.password,
+        });
+        props.setOpen(false);
+      })
+      .catch((response) => {
+        console.log(response);
+      });
   };
 
   const validateConfirmPassword = (value: any) => {

@@ -1,8 +1,11 @@
 import { Modal } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { FaTimes } from 'react-icons/fa';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import './sign-in.css';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { useSetRecoilState } from 'recoil';
+import { tokenState } from '../../store/app/app.atom';
 
 interface SignInProps {
   open: boolean;
@@ -11,7 +14,7 @@ interface SignInProps {
 
 export function SignIn(props: SignInProps) {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const setToken = useSetRecoilState(tokenState);
   const {
     register,
     handleSubmit,
@@ -19,8 +22,16 @@ export function SignIn(props: SignInProps) {
   } = useForm();
 
   const onSubmit = (data: any) => {
-    console.log(data);
-    //TODO: authentication
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, data.email, data.password)
+      .then(async (response) => {
+        const token = await response.user.getIdToken();
+        setToken(token);
+        handleClose();
+      })
+      .catch((response) => {
+        console.log(response);
+      });
   };
 
   const handleClose = () => {
