@@ -3,7 +3,12 @@ import { useForm } from 'react-hook-form';
 import { FaTimes } from 'react-icons/fa';
 import { useSearchParams } from 'react-router-dom';
 import './sign-in.scss';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  AuthError,
+  getAuth,
+  signInWithEmailAndPassword,
+  UserCredential,
+} from 'firebase/auth';
 import { useSetRecoilState } from 'recoil';
 import { tokenState } from '../../store/app/app.atom';
 
@@ -24,14 +29,31 @@ export function SignIn(props: SignInProps) {
   const onSubmit = (data: any) => {
     const auth = getAuth();
     signInWithEmailAndPassword(auth, data.email, data.password)
-      .then(async (response) => {
-        const token = await response.user.getIdToken();
-        setToken(token);
-        handleClose();
-      })
-      .catch((response) => {
-        console.log(response);
-      });
+      .then(handleSuccess)
+      .catch(handleError);
+  };
+
+  const handleSuccess = async (response: UserCredential) => {
+    const token = await response.user.getIdToken();
+    setToken(token);
+    handleClose();
+  };
+
+  const handleError = (response: AuthError) => {
+    switch (response.code) {
+      case 'auth/user-not-found':
+        alert('El usuario no esta registrado.');
+        break;
+      case 'auth/wrong-password':
+        alert('La contraseña es incorrecta.');
+        break;
+      case 'auth/invalid-email':
+        alert('El email es invalido.');
+        break;
+      case 'auth/too-many-requests':
+        alert('Has superado el máximo de intentos.');
+        break;
+    }
   };
 
   const handleClose = () => {
@@ -46,6 +68,7 @@ export function SignIn(props: SignInProps) {
     searchParams.set('abrir', 'registrar');
     setSearchParams(searchParams);
   };
+
   return (
     <Modal
       open={props.open}
@@ -128,6 +151,7 @@ export function SignIn(props: SignInProps) {
                     Ingresar
                   </button>
                   <button
+                    type="button"
                     onClick={handleSignUp}
                     className="border border-blue-700 text-blue-700 px-4 py-2 rounded-lg"
                   >
