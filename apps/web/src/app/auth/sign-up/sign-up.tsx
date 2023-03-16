@@ -3,7 +3,15 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { FaTimes } from 'react-icons/fa';
 import { useSearchParams } from 'react-router-dom';
-import styles from './sign-up.module.scss';
+import './sign-up.scss';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  AuthError,
+  UserCredential,
+} from 'firebase/auth';
+import { useSetRecoilState } from 'recoil';
+import { tokenState } from '../../store/app/app.atom';
 
 export interface SignUpProps {
   open: boolean;
@@ -12,7 +20,7 @@ export interface SignUpProps {
 
 export function SignUp(props: SignUpProps) {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const setToken = useSetRecoilState(tokenState);
   const {
     register,
     handleSubmit,
@@ -23,11 +31,31 @@ export function SignUp(props: SignUpProps) {
   const password = watch('password');
 
   const onSubmit = async (data: any) => {
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, data.email, data.password)
+      .then(handleSucces)
+      .catch(handleError);
+  };
+
+  const handleSucces = async (response: UserCredential) => {
     await axios.post('http://localhost:3333/user/create', {
-      email: data.email,
-      password: data.password,
+      uid: response.user.uid,
+      email: response.user.email,
     });
-    props.setOpen(false);
+    const token = await response.user.getIdToken();
+    setToken(token);
+    handleClose();
+  };
+
+  const handleError = (response: AuthError) => {
+    switch (response.code) {
+      case 'auth/email-already-in-use':
+        alert('El email ya esta registrado.');
+        break;
+      case 'auth/invalid-email':
+        alert('El email es invalido.');
+        break;
+    }
   };
 
   const validateConfirmPassword = (value: any) => {

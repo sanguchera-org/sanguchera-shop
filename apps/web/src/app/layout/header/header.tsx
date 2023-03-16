@@ -1,15 +1,26 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { quantityCartSelector } from '../../store';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { FaShoppingCart } from 'react-icons/fa';
+import { isAuthenticatedSelector } from '../../store/app/app.selector';
+import { tokenState } from '../../store/app/app.atom';
+import { getAuth } from 'firebase/auth';
 
 export function Header() {
   const cartQuantity = useRecoilValue(quantityCartSelector);
+  const isAuthenticated = useRecoilValue(isAuthenticatedSelector);
   const [searchParams, setSearchParams] = useSearchParams();
+  const setToken = useSetRecoilState(tokenState);
 
   const handleSignIn = () => {
     searchParams.set('abrir', 'ingresar');
     setSearchParams(searchParams);
+  };
+
+  const handleSignOut = async () => {
+    const auth = getAuth();
+    await auth.signOut();
+    setToken(null);
   };
 
   return (
@@ -27,12 +38,21 @@ export function Header() {
             </span>
           </Link>
           <div className="flex items-center lg:order-2">
-            <button
-              className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-              onClick={handleSignIn}
-            >
-              Ingresar
-            </button>
+            {isAuthenticated ? (
+              <button
+                className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                onClick={handleSignOut}
+              >
+                Salir
+              </button>
+            ) : (
+              <button
+                className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                onClick={handleSignIn}
+              >
+                Ingresar
+              </button>
+            )}
             <Link
               className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
               to="/tienda"

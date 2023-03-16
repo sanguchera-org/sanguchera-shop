@@ -8,6 +8,7 @@ import { RecoilRoot } from 'recoil';
 import { Suspense } from 'react';
 import ProductDetail from './products/product-detail/product-detail';
 import Open from './layout/open/open';
+import './core/firebase';
 
 export function App() {
   return (
