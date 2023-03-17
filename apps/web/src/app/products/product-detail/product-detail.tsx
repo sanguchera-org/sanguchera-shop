@@ -1,6 +1,5 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
+import { environment } from '../../../environments/environment';
 import axios from 'axios';
-import { Router } from 'express';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -8,10 +7,7 @@ import { Cart, Product } from '../../models';
 import { cartState } from '../../store';
 import styles from './product-detail.module.scss';
 
-/* eslint-disable-next-line */
-export interface ProductDetailProps {}
-
-export function ProductDetail(props: ProductDetailProps) {
+export function ProductDetail() {
   const { id } = useParams();
 
   const [cart, setCart] = useRecoilState<Cart>(cartState);
@@ -37,7 +33,7 @@ export function ProductDetail(props: ProductDetailProps) {
 
   useEffect(() => {
     const getProduct = async () => {
-      await axios.get(`http://localhost:3333/product/${id}`).then((res) => {
+      await axios.get(`${environment.apiUrl}/product/${id}`).then((res) => {
         setProduct(res.data);
       });
     };
@@ -52,7 +48,7 @@ export function ProductDetail(props: ProductDetailProps) {
             onMouseLeave={() => setIsHovered(true)}
             className="p-8 rounded-t-lg"
             src={isHovered ? product?.images[0] : product?.images[1]}
-            alt="product image"
+            alt="Product"
           />
         </div>
         <div className="border-gray-300 border-t-2">

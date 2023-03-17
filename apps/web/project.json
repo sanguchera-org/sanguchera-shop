@@ -7,30 +7,49 @@
     "build": {
       "executor": "@nrwl/vite:build",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
+      "defaultConfiguration": "development",
       "options": {
         "outputPath": "dist/apps/web",
         "postcssConfig": "apps/web/postcss.config.js"
       },
       "configurations": {
-        "development": {
+        "localhost": {
           "mode": "development"
         },
+        "development": {
+          "mode": "production",
+          "fileReplacements": [
+            {
+              "replace": "apps/web/src/environments/environment.ts",
+              "with": "apps/web/src/environments/environment.dev.ts"
+            }
+          ]
+        },
         "production": {
-          "mode": "production"
+          "mode": "production",
+          "fileReplacements": [
+            {
+              "replace": "apps/web/src/environments/environment.ts",
+              "with": "apps/web/src/environments/environment.prod.ts"
+            }
+          ]
         }
       }
     },
     "serve": {
       "executor": "@nrwl/vite:dev-server",
-      "defaultConfiguration": "development",
+      "defaultConfiguration": "localhost",
       "options": {
         "buildTarget": "web:build"
       },
       "configurations": {
+        "localhost": {
+          "buildTarget": "web:build:localhost",
+          "hmr": true
+        },
         "development": {
           "buildTarget": "web:build:development",
-          "hmr": true
+          "hmr": false
         },
         "production": {
           "buildTarget": "web:build:production",
@@ -40,11 +59,14 @@
     },
     "preview": {
       "executor": "@nrwl/vite:preview-server",
-      "defaultConfiguration": "development",
+      "defaultConfiguration": "localhost",
       "options": {
         "buildTarget": "web:build"
       },
       "configurations": {
+        "localhost": {
+          "buildTarget": "web:build:localhost"
+        },
         "development": {
           "buildTarget": "web:build:development"
         },

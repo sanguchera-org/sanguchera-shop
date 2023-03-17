@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -6,10 +7,7 @@ import { Product } from '../../models';
 import { Cart } from '../../models/cart';
 import { cartState } from '../../store';
 
-/* eslint-disable-next-line */
-export interface ProductsListProps {}
-
-export function ProductsList(props: ProductsListProps) {
+export function ProductsList() {
   const [products, setProducts] = useState<Array<Product>>([]);
   const [cart, setCart] = useRecoilState<Cart>(cartState);
 
@@ -31,7 +29,7 @@ export function ProductsList(props: ProductsListProps) {
 
   useEffect(() => {
     const getProducts = async () => {
-      await axios.get('http://localhost:3333/product/all').then((res) => {
+      await axios.get(`${environment.apiUrl}/product/all`).then((res) => {
         setProducts(res.data);
       });
     };

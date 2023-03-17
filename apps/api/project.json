@@ -17,10 +17,27 @@
         "webpackConfig": "apps/api/webpack.config.js"
       },
       "configurations": {
+        "development": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api/src/environments/environment.ts",
+              "with": "apps/api/src/environments/environment.dev.ts"
+            }
+          ]
+        },
         "production": {
           "optimization": true,
           "extractLicenses": true,
-          "inspect": false
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api/src/environments/environment.ts",
+              "with": "apps/api/src/environments/environment.prod.ts"
+            }
+          ]
         }
       }
     },
@@ -30,6 +47,9 @@
         "buildTarget": "api:build"
       },
       "configurations": {
+        "development": {
+          "buildTarget": "api:build:development"
+        },
         "production": {
           "buildTarget": "api:build:production"
         }
@@ -54,6 +74,13 @@
           "ci": true,
           "codeCoverage": true
         }
+      }
+    },
+    "package": {
+      "executor": "@nrwl/workspace:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "node scripts/generate-api-package.js"
       }
     }
   },

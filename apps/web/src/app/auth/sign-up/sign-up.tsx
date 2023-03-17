@@ -12,6 +12,7 @@ import {
 } from 'firebase/auth';
 import { useSetRecoilState } from 'recoil';
 import { tokenState } from '../../store/app/app.atom';
+import { environment } from '../../../environments/environment';
 
 export interface SignUpProps {
   open: boolean;
@@ -38,7 +39,7 @@ export function SignUp(props: SignUpProps) {
   };
 
   const handleSucces = async (response: UserCredential) => {
-    await axios.post('http://localhost:3333/user/create', {
+    await axios.post(`${environment.apiUrl}/user/create`, {
       uid: response.user.uid,
       email: response.user.email,
     });
