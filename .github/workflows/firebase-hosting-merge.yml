@@ -1,8 +1,8 @@
-name: Deploy to Firebase Hosting on merge
+name: Deploy Dev Web
 'on':
   push:
     branches:
-      - test
+      - main
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -12,7 +12,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: nx build web --configuration=development
+        run: yarn nx build web --configuration=development
       - name: Deploy
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -20,4 +20,3 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SANGUCHERA_SHOP }}'
           channelId: live
           projectId: sanguchera-shop
-          entryPoint: dist/apps/web
