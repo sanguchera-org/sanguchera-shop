@@ -37,6 +37,7 @@ export function Header() {
               Sanguchera
             </span>
           </Link>
+
           <div className="flex items-center lg:order-2">
             {isAuthenticated ? (
               <button

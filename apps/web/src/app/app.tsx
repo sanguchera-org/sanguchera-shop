@@ -9,6 +9,7 @@ import { Suspense } from 'react';
 import ProductDetail from './products/product-detail/product-detail';
 import Open from './layout/open/open';
 import './core/firebase';
+import CheckoutDelivery from './checkout/checkout-delivery/checkout-delivery';
 
 export function App() {
   return (
@@ -22,6 +23,7 @@ export function App() {
           <Route path="/tienda" element={<Shop />} />
           <Route path="/tienda/:id" element={<ProductDetail />} />
           <Route path="/compras" element={<Cart />} />
+          <Route path="/checkout" element={<CheckoutDelivery />} />
         </Routes>
         <Footer></Footer>
         <Open></Open>

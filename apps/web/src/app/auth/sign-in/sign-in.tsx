@@ -11,6 +11,7 @@ import {
 } from 'firebase/auth';
 import { useSetRecoilState } from 'recoil';
 import { tokenState } from '../../store/app/app.atom';
+import { userState } from '../../store/user/user.atom';
 
 interface SignInProps {
   open: boolean;
@@ -20,6 +21,7 @@ interface SignInProps {
 export function SignIn(props: SignInProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const setToken = useSetRecoilState(tokenState);
+  const setUser = useSetRecoilState(userState);
   const {
     register,
     handleSubmit,
@@ -34,8 +36,10 @@ export function SignIn(props: SignInProps) {
   };
 
   const handleSuccess = async (response: UserCredential) => {
-    const token = await response.user.getIdToken();
-    setToken(token);
+    //const token = await response.user.getIdToken();
+    const token = response.user;
+    setToken(await token.getIdToken());
+    setUser(token);
     handleClose();
   };
 
