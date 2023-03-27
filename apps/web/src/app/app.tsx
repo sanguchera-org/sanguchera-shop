@@ -10,6 +10,7 @@ import ProductDetail from './products/product-detail/product-detail';
 import Open from './layout/open/open';
 import './core/firebase';
 import CheckoutDelivery from './checkout/checkout-delivery/checkout-delivery';
+import CheckoutPayment from './checkout/checkout-payment/checkout-payment';
 
 export function App() {
   return (
@@ -23,7 +24,8 @@ export function App() {
           <Route path="/tienda" element={<Shop />} />
           <Route path="/tienda/:id" element={<ProductDetail />} />
           <Route path="/compras" element={<Cart />} />
-          <Route path="/checkout" element={<CheckoutDelivery />} />
+          <Route path="/checkout/delivery" element={<CheckoutDelivery />} />
+          <Route path="/checkout/payment" element={<CheckoutPayment />} />
         </Routes>
         <Footer></Footer>
         <Open></Open>
