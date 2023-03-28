@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { Product } from '../../models';
-import { Cart } from '../../models/cart';
+import { Cart } from '../../models/cart.model';
 import { cartState } from '../../store';
 
 export function ProductsList() {

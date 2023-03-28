@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { cartState } from '../../store';
 import './cart-list.scss';
@@ -25,7 +24,9 @@ export function CartList() {
   };
 
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-col border rounded p-6">
+      <h3 className="text-xl font-semibold leading-5 text-gray-800 mb-6">Productos</h3>
+
       {cart.map((item, index) => (
         <article
           key={item.product.id}
@@ -63,21 +64,6 @@ export function CartList() {
           </section>
         </article>
       ))}
-
-      {cart.length === 0 ? (
-        <section className="text-sm">
-          <p className="font-bold">Tu carrito está vacío.</p>
-          <p className="mb-4">
-            Una vez que añadas algo a tu carrito, aparecerá aquí. ¿Listo para
-            empezar?
-          </p>
-          <Link className="font-bold text-xl text-blue-500" to="/tienda">
-            Comenzar {'>'}
-          </Link>
-        </section>
-      ) : (
-        ''
-      )}
     </section>
   );
 }
