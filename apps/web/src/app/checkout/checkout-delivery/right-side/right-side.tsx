@@ -15,7 +15,7 @@ export function RightSide(props: RightSideProps) {
   console.log(user);
 
   return (
-    <div className="w-full p-5 mt-6 flex-row items-center justify-center">
+    <div className="w-full mt-6 flex-row items-center justify-center">
       <div className="bg-gray-100 rounded-md">
         <table className="text-left w-full">
           <thead className="">
